@@ -8,6 +8,7 @@ A Blockchain based DApp for E-ticketing
 
 1. Install Node (12.18.4) and npm (6.14.6)
 2. MetaMask extension for browser ([Link](https://chrome.google.com/webstore/detail/metamask/nkbihfbeogaeaoehlefnkodbefgpgknn?hl=en))
+3. Install Ganache ([Link](https://www.trufflesuite.com/ganache))
 
 Run the following commands in Terminal
 
@@ -36,14 +37,18 @@ Commands:
 
 Develop ---> compile ---> migarte ---> run Dapp
 
-### Before running app configure Metamask
+### Before running app configure Ganache and Metamask
 
-1. Go to browser and open metamask extension
+1. Create a new Workspace in Ganache GUI
 
-2. Create a new wallet
+2. Add truffle-config.js file to the project and save the workspace
 
-3. Go to settings add a local network if not available
+3. Go to browser and open metamask extension
 
-4. Create a new account in the network using one of the private key obtained from truffle
+4. Create a new wallet
+
+5. Go to settings add a local network if not available
+
+6. Create a new account in the network using one of the private key obtained from truffle
 
 Now we are ready to go!
