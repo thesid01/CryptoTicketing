@@ -1,5 +1,4 @@
-client/src/contracts
-
+build/contracts
 # Logs
 logs
 *.log
