@@ -25,8 +25,8 @@ Some Commands for truffle
 Commands:
 
   start develop env     truffle develop
-  Compile:              truffle compile
-  Migrate:              truffle migrate
+  Compile:              truffle compile --network networkName
+  Migrate:              truffle migrate --network networkName
   Test contracts:       truffle test
   Test dapp:            cd client && npm test
   Run dev server:       cd client && npm run start
