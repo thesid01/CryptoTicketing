@@ -1,0 +1,21 @@
+.mainContent {
+    display: flex;
+    flex-direction: column;
+    margin: 80px 0;
+    padding: 15px;
+    width: calc(100vw - 250px);
+}
+
+.welcome {
+    margin: auto;
+    font-size: 40px;
+    font-weight: 200;
+    text-align: center;
+    color: #8D3B72;
+}
+
+@media only screen and (max-width: 600px) {
+    .mainContent {
+        width: 100vw;
+    }
+}
