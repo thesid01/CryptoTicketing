@@ -51,6 +51,8 @@ class App extends Component {
   };
 
   toggleMenu = () => {
+    if(window.outerWidth>600)
+      return
     var newState = !this.state.menuOpen
     this.setState({menuOpen: newState});
     
