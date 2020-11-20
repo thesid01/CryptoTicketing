@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import { Link } from "react-router-dom";
 import './Header.css'
 
 function Header() {
@@ -21,7 +22,8 @@ function Header() {
                 <span className='menu-icon' onClick={handleMenuClick}> &#10008;</span>
                 :<span className='menu-icon' onClick={handleMenuClick}> &#9776;</span>
                 }
-                CryptoTicketing <span role="img" aria-label="ticket">🎫</span></div>
+                <Link to='/'> CryptoTicketing <span role="img" aria-label="ticket">🎫</span></Link>
+            </div> 
         </div>
     )
 }

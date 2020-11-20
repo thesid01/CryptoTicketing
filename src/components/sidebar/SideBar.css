@@ -19,9 +19,14 @@
     cursor: pointer;
 }
 
+.sideBar-ul > li > a {
+    text-decoration: none;
+    font-weight: 300;
+    color: white;
+}
 
-.sideBar-ul > li:hover {
-    font-weight: 500;
+.sideBar-ul > li > a:hover, .activePath{
+    font-weight: 500 !important;
 }
 
 @media only screen and (max-width: 600px) {

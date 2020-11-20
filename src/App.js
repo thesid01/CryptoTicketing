@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { BrowserRouter as Router } from 'react-router-dom'
 import SimpleStorageContract from "./contracts/SimpleStorage.json";
 import getWeb3 from "./getWeb3";
 
@@ -66,11 +67,13 @@ class App extends Component {
       return <div>Loading Web3, accounts, and contract...</div>;
     }
     return (
-      <div className="App">
-        <Header></Header>
-        <SideBar></SideBar>
-        <MainContent></MainContent>
-      </div>
+      <Router>
+        <div className="App">
+          <Header></Header>
+          <SideBar></SideBar>
+          <MainContent></MainContent>
+        </div>
+      </Router>
     );
   }
 }
