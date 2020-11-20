@@ -1,8 +1,10 @@
 import React, { useState } from 'react'
 import './event.css'
 
-function CreateEvent() {
-    
+function CreateEvent(props) {
+    var eventContract = props.bc.contracts.event,
+        accounts = props.bc.accounts[0];
+
     const [name, setname] = useState('')
     const [description, setdescription] = useState('')
     const [datetime, setdatetime] = useState('')
@@ -33,7 +35,32 @@ function CreateEvent() {
         setfile(e.target.files[0])
     }
 
-    const createEvent = () => {
+    const createEvent = async () => {
+        /* Create Event function parameters
+            string memory _name,
+            uint _time,
+            uint _price,
+            bool _token,
+            bool _limited,
+            uint _seats,
+            string memory _ipfs
+        */
+        var epoch_datetime = parseInt((new Date()).getTime()/1000.0)
+        var res = await eventContract.methods.createEvent(name, epoch_datetime, parseInt(price), false, isLimited, parseInt(seats), 'i do not know')
+        var resCall = res.send({from: accounts}, (err, result)=>{
+            if(err)
+                console.log(err);
+            else
+                console.log(result)
+        })
+
+        var res = await eventContract.methods.getEventsCount()
+        var resCall = res.call({from: accounts}, (err, result)=>{
+            if(err)
+                console.log(err);
+            else
+                console.log(result)
+        })
 
     }
 

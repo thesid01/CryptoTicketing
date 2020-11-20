@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { BrowserRouter as Router } from 'react-router-dom'
-import SimpleStorageContract from "./contracts/SimpleStorage.json";
+import EventContract from './contracts/Events.json'
+import EventTicketContract from './contracts/EventTicket.json'
 import getWeb3 from "./getWeb3";
 
 import Header from './components/header/Header'
@@ -14,7 +15,6 @@ class App extends Component {
   constructor() {
     super()
     this.state = {
-      storageValue: 0,
       web3: null,
       accounts: null,
       contract: null,
@@ -32,15 +32,22 @@ class App extends Component {
 
       // Get the contract instance.
       const networkId = await web3.eth.net.getId();
-      const deployedNetwork = SimpleStorageContract.networks[networkId];
-      const instance = new web3.eth.Contract(
-        SimpleStorageContract.abi,
+
+      const deployedNetwork = EventContract.networks[networkId];
+
+      const EventInstance = new web3.eth.Contract(
+        EventContract.abi,
         deployedNetwork && deployedNetwork.address,
-      );
+      )
+
+      const EventTicketInstance = new web3.eth.Contract(
+        EventTicketContract.abi,
+        deployedNetwork && deployedNetwork.address,
+      )
 
       // Set web3, accounts, and contract to the state, and then proceed with an
       // example of interacting with the contract's methods.
-      this.setState({ web3, accounts, contract: instance }, this.runExample);
+      this.setState({ web3, accounts, contract: {'event':EventInstance, 'ticket':EventTicketInstance} }, this.runExample);
     } catch (error) {
       // Catch any errors for any of the above operations.
       alert(
@@ -78,7 +85,6 @@ class App extends Component {
     // const response = await contract.methods.get().call();
 
     // Update state with the result.
-    this.setState({ storageValue: 5 });
   };
 
   render() {
@@ -90,7 +96,7 @@ class App extends Component {
         <div className="App">
           <Header open={this.state.menuOpen} toggleMenu={this.toggleMenu}></Header>
           <SideBar open={this.state.menuOpen} toggleMenu={this.toggleMenu} ></SideBar>
-          <MainContent open={this.state.menuOpen} closeMenu={this.closeMenu}></MainContent>
+          <MainContent bc={{accounts:this.state.accounts, contracts: this.state.contract}}></MainContent>
         </div>
       </Router>
     );

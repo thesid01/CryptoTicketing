@@ -10,7 +10,7 @@ import FindEvent from '../event/FindEvent'
 
 import './MainContent.css'
 
-function MainContent() {
+function MainContent(props) {
     return (
         <div className='mainContent'>
             <Switch>
@@ -20,7 +20,7 @@ function MainContent() {
                 <Route path='/my-events' component={Event} />
                 <Route path='/my-tickets' component={Ticket} />
                 <Route path='/events' component={FindEvent} />
-                <Route path='/create-event' component={CreateEvent} />
+                <Route path='/create-event' component={()=><CreateEvent bc={props.bc}/>} />
 
             </Switch>
         </div>
