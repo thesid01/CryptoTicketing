@@ -17,7 +17,8 @@ class App extends Component {
       storageValue: 0,
       web3: null,
       accounts: null,
-      contract: null
+      contract: null,
+      menuOpen: false,
     };
   }
 
@@ -49,6 +50,22 @@ class App extends Component {
     }
   };
 
+  toggleMenu = () => {
+    var newState = !this.state.menuOpen
+    this.setState({menuOpen: newState});
+    
+    var sidebar = document.getElementsByClassName('sideBar')[0]
+    if(!this.state.menuOpen){
+        sidebar.style.display = 'flex';
+    }else{
+        sidebar.style.display = 'none';
+    }
+  }
+
+  closeMenu = () => {
+    this.setState({menuOpen: false});
+  }
+
   runExample = async () => {
     // const { accounts, contract } = this.state;
 
@@ -69,9 +86,9 @@ class App extends Component {
     return (
       <Router>
         <div className="App">
-          <Header></Header>
-          <SideBar></SideBar>
-          <MainContent></MainContent>
+          <Header open={this.state.menuOpen} toggleMenu={this.toggleMenu}></Header>
+          <SideBar open={this.state.menuOpen} toggleMenu={this.toggleMenu} ></SideBar>
+          <MainContent open={this.state.menuOpen} closeMenu={this.closeMenu}></MainContent>
         </div>
       </Router>
     );
