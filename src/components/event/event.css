@@ -34,6 +34,7 @@
     transition: .2s;
     margin-top: 20px;
     display: flex;
+    border-color: #000;
 }
   
 .form-field:focus {
@@ -78,4 +79,9 @@ input[type='file'] {
 }
 button {
     cursor: pointer;
+}
+
+.date{
+    padding: 0;
+    background-color:white !important;
 }

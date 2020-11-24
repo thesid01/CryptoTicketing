@@ -17,9 +17,9 @@ function MainContent(props) {
                 <Route exact path='/'>
                     <div className='welcome'>Welcome To CryptoTicketing BlockChain Network <br/> 🎟️</div>
                 </Route>
-                <Route path='/my-events' component={Event} />
+                <Route path='/my-events' component={()=><Event bc={props.bc} />} />
                 <Route path='/my-tickets' component={Ticket} />
-                <Route path='/events' component={FindEvent} />
+                <Route path='/events' component={()=> <FindEvent bc={props.bc} />} />
                 <Route path='/create-event' component={()=><CreateEvent bc={props.bc}/>} />
 
             </Switch>

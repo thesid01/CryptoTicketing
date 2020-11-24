@@ -1,13 +1,21 @@
 import React, { useState } from 'react'
+import DateTimePicker from 'react-datetime-picker';
+
 import './event.css'
 
 function CreateEvent(props) {
+
     var eventContract = props.bc.contracts.event,
         accounts = props.bc.accounts[0];
 
+    // console.log(eventContract.methods.createEvent("event", 1637781633, 1, false, true, 123, "idonotknow").send({from: accounts}))
+
+    var nextDateAvailable = new Date()
+    nextDateAvailable.setDate(nextDateAvailable.getDate() + 1)
+
     const [name, setname] = useState('')
     const [description, setdescription] = useState('')
-    const [datetime, setdatetime] = useState('')
+    const [datetime, setdatetime] = useState(nextDateAvailable)
     const [price, setprice] = useState('')
     const [isLimited, setisLimited] = useState(false)
     const [seats, setseats] = useState('')
@@ -18,9 +26,6 @@ function CreateEvent(props) {
     }
     const handleDescriptionChange = (e) => {
         setdescription(e.target.value)
-    }
-    const handleDatetimeChange = (e) =>{
-        setdatetime(e.target.value)
     }
     const handlePriceChange = (e) =>{
         setprice(e.target.value)
@@ -45,23 +50,12 @@ function CreateEvent(props) {
             uint _seats,
             string memory _ipfs
         */
-        var epoch_datetime = parseInt((new Date()).getTime()/1000.0)
-        var res = await eventContract.methods.createEvent(name, epoch_datetime, parseInt(price), false, isLimited, parseInt(seats), 'i do not know')
-        var resCall = res.send({from: accounts}, (err, result)=>{
-            if(err)
-                console.log(err);
-            else
-                console.log(result)
-        })
-
-        var res = await eventContract.methods.getEventsCount()
-        var resCall = res.call({from: accounts}, (err, result)=>{
-            if(err)
-                console.log(err);
-            else
-                console.log(result)
-        })
-
+        var epoch_datetime = parseInt((new Date(datetime)).getTime()/1000.0)
+        console.log(name,epoch_datetime,parseInt(price),false,isLimited,parseInt(seats),'i do not know');
+        var result = await eventContract.methods
+                            .createEvent(name, epoch_datetime, parseFloat(price), false, isLimited, parseInt(123), "idonotknow")
+                            .send({from: accounts})
+        console.log(result)
     }
 
     return (
@@ -87,13 +81,12 @@ function CreateEvent(props) {
                 >
                 </textarea>
 
-                <input
-                    type="datetime-local" 
-                    className="form-field animation a4"
-                    placeholder="Choose Event Date and Time"
+                <DateTimePicker
+                    onChange={setdatetime}
                     value={datetime}
-                    onChange={handleDatetimeChange}
-                    min={(new Date()).toISOString().split('.')[0]}
+                    className="form-field animation a4 date"
+                    format="dd-MM-yyyy h:mm:ss a"
+                    minDate={nextDateAvailable}
                 />
 
                 <input
@@ -105,7 +98,7 @@ function CreateEvent(props) {
                     min='0.00000001'
                 />
 
-                <div className='form-field'>
+                <div className='form-field' style={{backgroundColor:'white'}}>
                     <input
                         id='limited'
                         type='checkbox'
