@@ -97,3 +97,27 @@ button {
 .bold{
     font-weight: 525;
 }
+
+.li{
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    height: 275px;
+    margin: 15px 25px;
+    color: white;
+    padding: 5px;
+    background-color: #8D3B72;
+    border-radius: 5px;
+}
+
+.ul{
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-gap: 10px;
+}
+
+.img{
+    width: 180px;
+    margin: 0 auto;
+    padding: 10px 0 0 0;
+}

@@ -27,7 +27,7 @@ function FindEvent(props) {
                 autoDismiss: true,
             })
         }else{
-            if(eventId == ""){
+            if(eventId === ""){
                 addToast('Enter Event Id.', {
                     appearance: 'warning',
                     autoDismiss: true,

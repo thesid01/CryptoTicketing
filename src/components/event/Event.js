@@ -36,7 +36,6 @@ function Event(props) {
             var result = await eventContract.methods.getEvent(eventId).call()
             return result
         }
-        var data = []
         getData()
         .then((temp)=>{
             seteventData(temp)

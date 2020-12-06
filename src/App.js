@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { BrowserRouter as Router } from 'react-router-dom'
-import { ToastProvider, useToasts } from 'react-toast-notifications'
+import { ToastProvider } from 'react-toast-notifications'
 import EventContract from './contracts/Events.json'
 import EventTicketContract from './contracts/EventTicket.json'
 import getWeb3 from "./getWeb3";

@@ -64,7 +64,7 @@ function CreateEvent(props) {
             uint _seats,
             string memory _ipfs
         */
-        if(name == "" || description == "" || price == '' || isLimited && seats == "" ){
+        if(name === "" || description === "" || price === '' || (isLimited && seats === "") ){
             addToast('Please Enter all details.', {
                 appearance: 'warning',
                 autoDismiss: true,
@@ -75,9 +75,9 @@ function CreateEvent(props) {
         }
         var epoch_datetime = parseInt((new Date(datetime)).getTime()/1000.0)
         // console.log(name,epoch_datetime,parseInt(price),false,isLimited,parseInt(seats),'i do not know');
-        var result = await eventContract.methods
-                            .createEvent(name, epoch_datetime, parseFloat(price), false, isLimited, parseInt(123), "yet to be done")
-                            .send({from: accounts})
+        await eventContract.methods
+            .createEvent(name, epoch_datetime, parseFloat(price), false, isLimited, parseInt(123), "yet to be done")
+            .send({from: accounts})
         initializeState()
         setisLoading(false)
         addToast('Event Created Successfully.', {
