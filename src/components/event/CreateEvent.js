@@ -1,6 +1,8 @@
 import React, { useState } from 'react'
 import DateTimePicker from 'react-datetime-picker';
-
+import { useToasts } from 'react-toast-notifications'
+import "react-loader-spinner/dist/loader/css/react-spinner-loader.css"
+import Loader from 'react-loader-spinner'
 import './event.css'
 
 function CreateEvent(props) {
@@ -20,6 +22,8 @@ function CreateEvent(props) {
     const [isLimited, setisLimited] = useState(false)
     const [seats, setseats] = useState('')
     const [file, setfile] = useState(null)
+    const [isLoading, setisLoading] = useState(false)
+    const { addToast } = useToasts()
     
     const handleNameChange = (e) =>{
         setname(e.target.value)
@@ -40,6 +44,16 @@ function CreateEvent(props) {
         setfile(e.target.files[0])
     }
 
+    const initializeState = () => {
+        setname('');
+        setdescription('');
+        setdatetime();
+        setprice('');
+        setisLimited(false);
+        setseats('');
+        setfile(null);
+    }
+
     const createEvent = async () => {
         /* Create Event function parameters
             string memory _name,
@@ -50,17 +64,31 @@ function CreateEvent(props) {
             uint _seats,
             string memory _ipfs
         */
+        if(name == "" || description == "" || price == '' || isLimited && seats == "" ){
+            addToast('Please Enter all details.', {
+                appearance: 'warning',
+                autoDismiss: true,
+            })
+            return
+        }else{
+            setisLoading(true)
+        }
         var epoch_datetime = parseInt((new Date(datetime)).getTime()/1000.0)
-        console.log(name,epoch_datetime,parseInt(price),false,isLimited,parseInt(seats),'i do not know');
+        // console.log(name,epoch_datetime,parseInt(price),false,isLimited,parseInt(seats),'i do not know');
         var result = await eventContract.methods
-                            .createEvent(name, epoch_datetime, parseFloat(price), false, isLimited, parseInt(123), "idonotknow")
+                            .createEvent(name, epoch_datetime, parseFloat(price), false, isLimited, parseInt(123), "yet to be done")
                             .send({from: accounts})
-        console.log(result)
+        initializeState()
+        setisLoading(false)
+        addToast('Event Created Successfully.', {
+            appearance: 'success',
+            autoDismiss: true,
+        })
     }
 
     return (
         <div className='event'>
-            <div className="form">
+            { !isLoading && <div className="form">
                 <h2>Create Event</h2>
     
                 <input
@@ -139,7 +167,18 @@ function CreateEvent(props) {
                 <button
                     className="animation a6"
                     onClick={createEvent}>Create Event</button>
-            </div>
+            </div> }
+
+            {isLoading && 
+                <div className="form">
+                    <Loader
+                        type="TailSpin"
+                        color="#8D3B72"
+                        height={100}
+                        width={100}
+                    />
+                </div>
+            }
         </div>
     )
 }

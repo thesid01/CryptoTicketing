@@ -29,7 +29,7 @@ function Event(props) {
                 }, 6000)
             }
         })
-    },[eventId])
+    },[])
 
     const getEventData = () => {
         async function getData(){
@@ -41,6 +41,13 @@ function Event(props) {
         .then((temp)=>{
             seteventData(temp)
         })
+    }
+
+    const getLocaleTime = (time) => {
+        var utcSeconds = parseInt(time);
+        var d = new Date(0); // The 0 there is the key, which sets the date to the epoch
+        d.setUTCSeconds(utcSeconds);
+        return d.toLocaleString()
     }
 
     return ( 
@@ -62,10 +69,10 @@ function Event(props) {
                     <h2>Event Details</h2>
                     <table style={{display: "table"}}>
                         <tbody>
-                                <tr><td className="right bold">Name:</td><td className="left">{eventData[0]}</td></tr>
-                                <tr><td className="right bold">Time:</td><td className="left">{eventData[1]}</td></tr>
-                                <tr><td className="right bold">Price:</td><td className="left">{eventData[2]}</td></tr>
-                                <tr><td className="right bold">Limited Seats:</td><td className="left">{eventData[4] ? "Yes" : "No"}</td></tr>
+                                <tr><td className="right bold">Name :</td><td className="left">{eventData[0]}</td></tr>
+                                <tr><td className="right bold">Date :</td><td className="left">{getLocaleTime(eventData[1])}</td></tr>
+                                <tr><td className="right bold">Price :</td><td className="left">{eventData[2]}</td></tr>
+                                <tr><td className="right bold">Limited Seats :</td><td className="left">{eventData[4] ? "Yes" : "No"}</td></tr>
                                 {eventData[4] && <tr><td className="right bold">Seats:</td><td className="left">{eventData[5]}</td></tr> }
                         </tbody>
                     </table>

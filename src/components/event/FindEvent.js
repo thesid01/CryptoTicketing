@@ -18,7 +18,7 @@ function FindEvent(props) {
         getEvents().then((events)=>{
             settotalEvent(events)
         })
-    })
+    },[])
 
     const handleFindEvent = () => {
         if(parseInt(eventId) >= parseInt(totalEvent)){
@@ -27,7 +27,14 @@ function FindEvent(props) {
                 autoDismiss: true,
             })
         }else{
-            history.push(`/event/${eventId}`);
+            if(eventId == ""){
+                addToast('Enter Event Id.', {
+                    appearance: 'warning',
+                    autoDismiss: true,
+                })
+            }else{
+                history.push(`/event/${eventId}`);
+            }
         }
     }
 
