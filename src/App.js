@@ -1,9 +1,11 @@
 import React, { Component } from "react";
 import { BrowserRouter as Router } from 'react-router-dom'
+import { ToastProvider, useToasts } from 'react-toast-notifications'
 import EventContract from './contracts/Events.json'
 import EventTicketContract from './contracts/EventTicket.json'
 import getWeb3 from "./getWeb3";
-
+import "react-loader-spinner/dist/loader/css/react-spinner-loader.css"
+import Loader from 'react-loader-spinner'
 import Header from './components/header/Header'
 import SideBar from './components/sidebar/SideBar'
 import MainContent from './components/mainContent/MainContent'
@@ -12,8 +14,8 @@ import "./App.css";
 
 class App extends Component {
   
-  constructor() {
-    super()
+  constructor(props) {
+    super(props)
     this.state = {
       web3: null,
       accounts: null,
@@ -89,15 +91,26 @@ class App extends Component {
 
   render() {
     if (!this.state.web3) {
-      return <div>Loading Web3, accounts, and contract...</div>;
+      return <div className="App App-header">
+        Loading Web3, accounts, and contract...
+        <Loader
+            type="TailSpin"
+            color="#8D3B72"
+            height={100}
+            width={100}
+            // timeout={6000}
+        />
+        </div>;
     }
     return (
       <Router>
-        <div className="App">
-          <Header open={this.state.menuOpen} toggleMenu={this.toggleMenu}></Header>
-          <SideBar open={this.state.menuOpen} toggleMenu={this.toggleMenu} ></SideBar>
-          <MainContent bc={{accounts:this.state.accounts, contracts: this.state.contract}}></MainContent>
-        </div>
+        <ToastProvider>
+          <div className="App">
+            <Header open={this.state.menuOpen} toggleMenu={this.toggleMenu}></Header>
+            <SideBar open={this.state.menuOpen} toggleMenu={this.toggleMenu} ></SideBar>
+            <MainContent bc={{accounts:this.state.accounts, contracts: this.state.contract}}></MainContent>
+          </div>
+        </ToastProvider>
       </Router>
     );
   }

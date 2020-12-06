@@ -3,10 +3,11 @@ import {
     Switch,
     Route,
 } from "react-router-dom";
-import Event from '../event/MyEvents'
+import MyEvent from '../event/MyEvents'
 import Ticket from '../event/MyTickets'
 import CreateEvent from '../event/CreateEvent'
 import FindEvent from '../event/FindEvent'
+import Event from '../event/Event'
 
 import './MainContent.css'
 
@@ -17,11 +18,11 @@ function MainContent(props) {
                 <Route exact path='/'>
                     <div className='welcome'>Welcome To CryptoTicketing BlockChain Network <br/> 🎟️</div>
                 </Route>
-                <Route path='/my-events' component={()=><Event bc={props.bc} />} />
+                <Route path='/my-events' component={(prop)=><MyEvent {...prop} {...props} />} />
                 <Route path='/my-tickets' component={Ticket} />
-                <Route path='/events' component={()=> <FindEvent bc={props.bc} />} />
-                <Route path='/create-event' component={()=><CreateEvent bc={props.bc}/>} />
-
+                <Route path='/events' component={(prop)=> <FindEvent {...prop} {...props} />} />
+                <Route path="/event/:EventId" component={(prop)=> <Event {...prop} {...props} />} />
+                <Route path='/create-event' component={(prop)=><CreateEvent {...prop} {...props}/>} />
             </Switch>
         </div>
     )

@@ -92,10 +92,10 @@ function CreateEvent(props) {
                 <input
                     type='number' 
                     className="form-field animation a4"
-                    placeholder="Ticket Price (in eth)"
+                    placeholder="Ticket Price (in wei)"
                     value={price}
                     onChange={handlePriceChange}
-                    min='0.00000001'
+                    min='1'
                 />
 
                 <div className='form-field' style={{backgroundColor:'white'}}>

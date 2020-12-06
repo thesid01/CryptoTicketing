@@ -41,7 +41,7 @@
     border-color: #0f7ef1;
 }
   
-.form > button {
+.form > button, .form > a> button  {
     padding: 12px 10px;
     border: 0;
     background: linear-gradient(to right, #de48b5 0%,#0097ff 100%); 
@@ -84,4 +84,16 @@ button {
 .date{
     padding: 0;
     background-color:white !important;
+}
+
+.left{
+    text-align: left;
+}
+
+.right{
+    text-align: right;
+}
+
+.bold{
+    font-weight: 525;
 }
