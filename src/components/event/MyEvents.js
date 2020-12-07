@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react'
+import { NavLink } from 'react-router-dom';
 import logo from '../../logo.png'
 
 function MyEvents(props) {
@@ -32,27 +33,41 @@ function MyEvents(props) {
         return d.toLocaleString()
     }
 
+    const isOld = (time) => {
+        var utcSeconds = parseInt(time);
+        var d = new Date(0); // The 0 there is the key, which sets the date to the epoch
+        d.setUTCSeconds(utcSeconds);
+        var sec = (new Date()).getTime()
+        // console.log(sec, d.getTime())
+        return sec >= d.getTime()
+    }
+
     return (
         <div className='event'>
+            <h2 style={{textAlign:"center"}}>My Events</h2>
             <div>
                 <ul className="ul">
                     {allData.map((ele, index)=>{
                         return (
-                        <li key={index} className="li">
+                        <li key={index} className={isOld(ele["time"]) ? "li old" : "li"}>
                             <img alt="event img" src={logo} className="img">
                             </img>
                             <h2 style={{fontWeight:"400"}}>
                                 {ele["name"]}
                             </h2>
-                            <div>
+                            <div style={{margin:'5px'}}>
                                 {getLocaleTime(ele["time"])}
                             </div>
                             <div>
-                                {ele["limited"] && <>Limited Seats { ele["seats"]}</>}
+                                {ele["limited"] && <>Limited Seats - { ele["seats"] - ele["sold"]} Available</>}
+                                {!ele["limited"] && <>Unlimited Seats</>}
                             </div>
+                            {isOld(ele["time"]) ? "" : 
                             <div className="form">
-                                <button>Buy Ticket</button>
-                            </div>
+                                <NavLink to={`/event/${index}`}>
+                                    <button>Buy Ticket</button>
+                                </NavLink>
+                            </div>}
                         </li>)
                     })}
                 </ul>

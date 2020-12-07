@@ -23,7 +23,6 @@ function Event(props) {
 
         getEvents()
         .then((events)=>{
-            console.log(events)
             settotalEvent(events)
             var id = parseInt(props.match.params.EventId)
             seteventId(id)
@@ -35,6 +34,14 @@ function Event(props) {
         })
     },[])
 
+    const isOld = (time) => {
+        var utcSeconds = parseInt(time);
+        var d = new Date(0); // The 0 there is the key, which sets the date to the epoch
+        d.setUTCSeconds(utcSeconds);
+        var sec = (new Date()).getTime()
+        return sec >= d.getTime()
+    }
+
     const getEventData = () => {
         async function getData(){
             var result = await eventContract.methods.getEvent(props.match.params.EventId).call()
@@ -45,7 +52,7 @@ function Event(props) {
             seteventData(temp)
             if(gotData === false){
                 setgotData(true)
-                fetch(`https://ipfs.io/ipfs/${temp[7]}`)
+                fetch(`http://localhost:8080/ipfs/${temp[7]}`)
                 .then(res => res.json())
                 .then((data) => {
                     console.log(data)
@@ -108,9 +115,10 @@ function Event(props) {
                         width={50}
                     />}{des}
                     <hr></hr>
+                    {isOld(eventData[1]) ? "" :
                     <button>
                         Buy Ticket
-                    </button>
+                    </button>}
                 </>
                 }
             </div>
