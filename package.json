@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "@openzeppelin/contracts": "^3.2.0",
+    "ipfs-http-client": "^48.1.2",
     "react": "16.11.0",
     "react-datetime-picker": "^3.0.4",
     "react-dom": "16.11.0",

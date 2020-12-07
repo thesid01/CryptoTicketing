@@ -2,14 +2,18 @@ import React, { useState, useEffect } from 'react'
 import { useHistory } from 'react-router-dom'
 import "react-loader-spinner/dist/loader/css/react-spinner-loader.css"
 import Loader from 'react-loader-spinner'
+import IpfsHttpClient from 'ipfs-http-client';
 
 function Event(props) {
     var eventContract = props.bc.contracts.event;
-    
+    const ipfs = IpfsHttpClient({ host: 'localhost', port: '5001', protocol: 'http' })
     const [totalEvent, settotalEvent] = useState(0)
-    const [eventId, seteventId] = useState('') 
+    const [eventId, seteventId] = useState('')
     const history = useHistory()
     const [eventData, seteventData] = useState("")
+    const [gotData, setgotData] = useState(false)
+    const [image, setimage] = useState('')
+    const [des, setdes] = useState('')
 
     useEffect(() => {
         async function getEvents(){
@@ -33,12 +37,28 @@ function Event(props) {
 
     const getEventData = () => {
         async function getData(){
-            var result = await eventContract.methods.getEvent(eventId).call()
+            var result = await eventContract.methods.getEvent(props.match.params.EventId).call()
             return result
         }
         getData()
-        .then((temp)=>{
+        .then(async (temp)=>{
             seteventData(temp)
+            if(gotData === false){
+                setgotData(true)
+                fetch(`https://ipfs.io/ipfs/${temp[7]}`)
+                .then(res => res.json())
+                .then((data) => {
+                    console.log(data)
+                    setdes(data["text"])
+                    
+                    var arrayBufferView = new Uint8Array( data["image"]["data"] );
+                    var blob = new Blob( [ arrayBufferView ], { type: "image/jpeg" } );
+                    var urlCreator = window.URL || window.webkitURL;
+                    var imageUrl = urlCreator.createObjectURL( blob );
+                    setimage(imageUrl)
+
+                })
+            }
         })
     }
 
@@ -50,7 +70,14 @@ function Event(props) {
     }
 
     return ( 
-        <div className='event'>
+        <div className='event' style={{textAlign:"center"}}>
+            {(eventId < totalEvent) && <img src={image}></img> }
+            {(eventId < totalEvent) && image === "" && <Loader
+                type="TailSpin"
+                color="#8D3B72"
+                height={50}
+                width={50}
+            />}
             <div className='form'>
                 {!(eventId < totalEvent) ? <>
                         <div> Your Event Id is wrong. And this page does not not exists. Redirecting </div>
@@ -59,7 +86,6 @@ function Event(props) {
                             color="#8D3B72"
                             height={100}
                             width={100}
-                            timeout={6000}
                         />
                 </> 
                 :
@@ -75,7 +101,12 @@ function Event(props) {
                                 {eventData[4] && <tr><td className="right bold">Seats:</td><td className="left">{eventData[5]}</td></tr> }
                         </tbody>
                     </table>
-                    <h3>Description:</h3>{eventData[7]}
+                    <h3>Description:</h3>{des === "" && <Loader
+                        type="TailSpin"
+                        color="#8D3B72"
+                        height={50}
+                        width={50}
+                    />}{des}
                     <hr></hr>
                     <button>
                         Buy Ticket

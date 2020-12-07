@@ -4,12 +4,16 @@ import { useToasts } from 'react-toast-notifications'
 import "react-loader-spinner/dist/loader/css/react-spinner-loader.css"
 import Loader from 'react-loader-spinner'
 import './event.css'
+import IpfsHttpClient from 'ipfs-http-client';
+
 
 function CreateEvent(props) {
-
+    
     var eventContract = props.bc.contracts.event,
-        accounts = props.bc.accounts[0];
-
+    accounts = props.bc.accounts[0];
+    
+    // const ipfs = new IPFS({ host: 'ipfs.infura.io', port: 5001, protocol: 'https' });
+    const ipfs = IpfsHttpClient({ host: 'localhost', port: '5001', protocol: 'http' })
     // console.log(eventContract.methods.createEvent("event", 1637781633, 1, false, true, 123, "idonotknow").send({from: accounts}))
 
     var nextDateAvailable = new Date()
@@ -22,7 +26,9 @@ function CreateEvent(props) {
     const [isLimited, setisLimited] = useState(false)
     const [seats, setseats] = useState('')
     const [file, setfile] = useState(null)
+    const [buffer, setbuffer] = useState('')
     const [isLoading, setisLoading] = useState(false)
+    const [ipfsHash, setipfsHash] = useState('')
     const { addToast } = useToasts()
     
     const handleNameChange = (e) =>{
@@ -40,9 +46,21 @@ function CreateEvent(props) {
     const handleSeatsChange = (e) => {
         setseats(e.target.value)
     }
-    const handleFileChange = (e) => {
-        setfile(e.target.files[0])
+    const convertToBuffer = async(reader) => {
+        //file is converted to a buffer for upload to IPFS
+        const bufferLocal = await Buffer.from(reader.result);
+        //set this buffer -using es6 syntax
+        setbuffer(bufferLocal);
     }
+    const handleFileChange = (event) => {
+        // setfile(e.target.files[0])
+        event.stopPropagation()
+        event.preventDefault()
+        const file = event.target.files[0]
+        let reader = new window.FileReader()
+        reader.readAsArrayBuffer(file)
+        reader.onloadend = () => convertToBuffer(reader)    
+    };
 
     const initializeState = () => {
         setname('');
@@ -73,10 +91,19 @@ function CreateEvent(props) {
         }else{
             setisLoading(true)
         }
+
+        let data = JSON.stringify({
+			image: buffer,
+			text: description
+		});
+
+        var result = await ipfs.add(data)
+        setipfsHash(result)
+
         var epoch_datetime = parseInt((new Date(datetime)).getTime()/1000.0)
         // console.log(name,epoch_datetime,parseInt(price),false,isLimited,parseInt(seats),'i do not know');
         await eventContract.methods
-            .createEvent(name, epoch_datetime, parseFloat(price), false, isLimited, parseInt(123), "yet to be done")
+            .createEvent(name, epoch_datetime, parseFloat(price), false, isLimited, parseInt(123), result["path"])
             .send({from: accounts})
         initializeState()
         setisLoading(false)
