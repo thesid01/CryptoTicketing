@@ -24,7 +24,7 @@ function CreateEvent(props) {
     const [datetime, setdatetime] = useState(nextDateAvailable)
     const [price, setprice] = useState('')
     const [isLimited, setisLimited] = useState(false)
-    const [seats, setseats] = useState('')
+    const [seats, setseats] = useState(0)
     const [file, setfile] = useState(null)
     const [buffer, setbuffer] = useState('')
     const [isLoading, setisLoading] = useState(false)
@@ -68,7 +68,7 @@ function CreateEvent(props) {
         setdatetime();
         setprice('');
         setisLimited(false);
-        setseats('');
+        setseats(0);
         setfile(null);
     }
 
@@ -103,7 +103,7 @@ function CreateEvent(props) {
         var epoch_datetime = parseInt((new Date(datetime)).getTime()/1000.0)
         // console.log(name,epoch_datetime,parseInt(price),false,isLimited,parseInt(seats),'i do not know');
         await eventContract.methods
-            .createEvent(name, epoch_datetime, parseFloat(price), false, isLimited, parseInt(123), result["path"])
+            .createEvent(name, epoch_datetime, parseFloat(price), false, isLimited, parseInt(seats), result["path"])
             .send({from: accounts})
         initializeState()
         setisLoading(false)

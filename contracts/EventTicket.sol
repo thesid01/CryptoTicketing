@@ -24,4 +24,7 @@ contract EventTicket is ERC721("EventTicket", "🎟️") {
 		return(_ticket.eventId, _ticket.seatId);
 	}
 
+    function setTicket(uint _id, address add) public{
+        ownedTickets[add].push(_id);
+    }
 }

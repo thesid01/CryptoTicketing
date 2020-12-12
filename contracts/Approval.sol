@@ -2,8 +2,9 @@
 pragma solidity ^0.6.0;
 pragma experimental ABIEncoderV2;
 import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
+import "@openzeppelin/contracts/access/Ownable.sol";
 
-contract Approval {
+contract Approval is Ownable {
 	// using SafeMath for uint;
     // using SafeMath for uint256;
     
@@ -16,6 +17,7 @@ contract Approval {
         string aadharNo;
         string photoProof;
         bool approved;
+        address requestAddress;
     }
     
     mapping(string => bool) aadhar;
@@ -51,7 +53,8 @@ contract Approval {
         Request memory _request = Request({
 			aadharNo: ssn,
 			photoProof: hash,
-			approved: false
+			approved: false,
+            requestAddress: msg.sender
 		});
 		requests[TotalRequests] = _request;
 		TotalRequests+=1;
@@ -60,14 +63,15 @@ contract Approval {
     }
     
     function approve(uint id)
+    onlyOwner()
     validId(id)
     public
     {
         Request storage _r = requests[id];
         _r.approved = true;
         aadhar[_r.aadharNo] = true;
-        addToAadhar[msg.sender] = _r.aadharNo;
-        approved[msg.sender] = true;
+        addToAadhar[_r.requestAddress] = _r.aadharNo;
+        approved[_r.requestAddress] = true;
     }
     
     function getRequest(uint id)

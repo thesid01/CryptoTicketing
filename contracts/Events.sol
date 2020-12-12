@@ -2,13 +2,14 @@
 pragma solidity ^0.6.0;
 
 import './EventTicket.sol';
+import './Approval.sol';
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 import '@openzeppelin/contracts/token/ERC20/ERC20.sol';
 import '@openzeppelin/contracts/utils/Pausable.sol';
 import '@openzeppelin/contracts/math/SafeMath.sol';
 
-contract Events is EventTicket, Pausable, Ownable {
+contract Events is EventTicket, Pausable, Ownable, Approval {
 	using SafeMath for uint;
     using SafeMath for uint256;
 
@@ -44,6 +45,11 @@ contract Events is EventTicket, Pausable, Ownable {
 
     modifier eventExist(uint _id) {
         require(_id < allEvents.length);
+        _;
+    }
+
+    modifier isApprovedModifier(address add){
+        require(isApproved(add));
         _;
     }
 
@@ -123,6 +129,7 @@ contract Events is EventTicket, Pausable, Ownable {
 		eventExist(_eventId)
 		goodTime(allEvents[_eventId].time)
 		whenNotPaused()
+		isApprovedModifier(msg.sender)
 	{
 		Event memory _event = allEvents[_eventId];
 
@@ -146,6 +153,7 @@ contract Events is EventTicket, Pausable, Ownable {
 		});
         tickets.push(_ticket);
 		uint _ticketId = tickets.length.sub(1);
+		setTicket(_ticketId, msg.sender);
         _mint(msg.sender, _ticketId);
 		emit SoldTicket(msg.sender, _eventId, _ticketId);
 	}
