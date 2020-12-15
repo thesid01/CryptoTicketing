@@ -3,13 +3,18 @@ import { useHistory } from 'react-router-dom'
 import "react-loader-spinner/dist/loader/css/react-spinner-loader.css"
 import Loader from 'react-loader-spinner'
 import IpfsHttpClient from 'ipfs-http-client';
+import { useToasts } from 'react-toast-notifications'
 
 function Event(props) {
-    var eventContract = props.bc.contracts.event;
+    var eventContract = props.bc.contracts.event,
+    accounts = props.bc.accounts[0];
+    
+    const history = useHistory()
+    const { addToast } = useToasts()
+
     const ipfs = IpfsHttpClient({ host: 'localhost', port: '5001', protocol: 'http' })
     const [totalEvent, settotalEvent] = useState(0)
     const [eventId, seteventId] = useState('')
-    const history = useHistory()
     const [eventData, seteventData] = useState("")
     const [gotData, setgotData] = useState(false)
     const [image, setimage] = useState('')
@@ -76,6 +81,20 @@ function Event(props) {
         return d.toLocaleString()
     }
 
+    const buyTicket = () => {
+        async function buyTicket() {
+            var result = await eventContract.methods.buyTicket(props.match.params.EventId).send({from: accounts, value: parseInt(eventData[2])})
+            return result
+        }
+        buyTicket().then(()=>{
+            addToast('Request Created Successfully.', {
+                appearance: 'success',
+                autoDismiss: true,
+            })
+            history.push('/')
+        })
+    }
+
     return ( 
         <div className='event' style={{textAlign:"center"}}>
             {(eventId < totalEvent) && <img src={image}></img> }
@@ -116,7 +135,7 @@ function Event(props) {
                     />}{des}
                     <hr></hr>
                     {isOld(eventData[1]) ? "" :
-                    <button>
+                    <button onClick={buyTicket}>
                         Buy Ticket
                     </button>}
                 </>

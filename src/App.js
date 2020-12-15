@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { BrowserRouter as Router } from 'react-router-dom'
+import { BrowserRouter as Router, NavLink } from 'react-router-dom'
 import { ToastProvider } from 'react-toast-notifications'
 import EventContract from './contracts/Events.json'
 import EventTicketContract from './contracts/EventTicket.json'
@@ -21,6 +21,8 @@ class App extends Component {
       accounts: null,
       contract: null,
       menuOpen: false,
+      isApproved: false,
+      isOwner: false
     };
   }
 
@@ -49,7 +51,13 @@ class App extends Component {
 
       // Set web3, accounts, and contract to the state, and then proceed with an
       // example of interacting with the contract's methods.
-      this.setState({ web3, accounts, contract: {'event':EventInstance, 'ticket':EventTicketInstance} }, this.runExample);
+      var res = await EventInstance.methods.isApproved(accounts[0]).call();
+      this.setState({ web3, accounts, contract: {'event':EventInstance, 'ticket':EventTicketInstance},  isApproved: res}, this.runExample);
+      res = await EventInstance.methods.owner().call();
+      console.log(res)
+      if(accounts[0] === res){
+        this.setState({isOwner: true})
+      }
     } catch (error) {
       // Catch any errors for any of the above operations.
       alert(
@@ -107,7 +115,8 @@ class App extends Component {
         <ToastProvider>
           <div className="App">
             <Header open={this.state.menuOpen} toggleMenu={this.toggleMenu}></Header>
-            <SideBar open={this.state.menuOpen} toggleMenu={this.toggleMenu} ></SideBar>
+            {!this.state.isApproved && !this.state.isOwner&& <div className="notApproved">Not Approved. Click <NavLink to="/getApproval">here </NavLink>to apply for approval.</div>}
+            <SideBar open={this.state.menuOpen} toggleMenu={this.toggleMenu} isOwner={this.state.isOwner}></SideBar>
             <MainContent bc={{accounts:this.state.accounts, contracts: this.state.contract}}></MainContent>
           </div>
         </ToastProvider>

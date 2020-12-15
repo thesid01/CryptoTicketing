@@ -53,7 +53,8 @@ function CreateEvent(props) {
         setbuffer(bufferLocal);
     }
     const handleFileChange = (event) => {
-        // setfile(e.target.files[0])
+        console.log(event.target.files[0].name)
+        setfile(event.target.files[0])
         event.stopPropagation()
         event.preventDefault()
         const file = event.target.files[0]

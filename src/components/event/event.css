@@ -120,8 +120,28 @@ button {
     width: 180px;
     margin: 0 auto;
     padding: 10px 0 0 0;
+    height: auto;
 }
 
 .old{
     background-color: #8A7090;
+}
+
+img{
+    height: 200px;
+}
+
+#QR {
+    background-color: whitesmoke;
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+}
+
+#QR > img {
+    height: 100px;
+}
+
+svg {
+    margin: 10px 20px;
 }
