@@ -17,10 +17,23 @@ function Event(props) {
     const [gotData, setgotData] = useState(false)
     const [image, setimage] = useState('')
     const [des, setdes] = useState('')
+    const [allData, setallData] = useState([])
 
     useEffect(() => {
         async function getEvents(){
             var result = await eventContract.methods.getEventsCount().call()
+            return result
+        }
+
+        async function getTickets(id){
+            var result = await eventContract.methods.ticketsOfEvent(id).call()
+            return result
+        }
+
+        async function getData(id){
+            var result = await eventContract.methods.getTicket(parseInt(id)).call()
+            result['__id'] = id
+            setallData(prevData => [...prevData, result])
             return result
         }
 
@@ -29,6 +42,12 @@ function Event(props) {
             settotalEvent(events)
             var id = parseInt(props.match.params.EventId)
             seteventId(id)
+            getTickets(id)
+            .then((data)=>{
+                for(var id in data){
+                    getData(id)
+                }
+            })
             if(!(id < events)){
                 setTimeout(()=>{
                     history.push(`/events`);
@@ -93,6 +112,26 @@ function Event(props) {
         })
     }
 
+    const refundApprove = (e) => {
+        var id = e.target.getAttribute('data-id')
+        async function approveRefund(id){
+            var result = await eventContract.methods.approveRefund(id).send({from:accounts})
+            return result
+        }
+        try {
+            approveRefund(id)
+            addToast('Refund successful.', {
+                appearance: 'success',
+                autoDismiss: true,
+            })
+        } catch (error) {
+            addToast('Error Occurred Try Again.', {
+                appearance: 'success',
+                autoDismiss: true,
+            })
+        }
+    }
+
     return ( 
         <div className='event' style={{textAlign:"center"}}>
             {(eventId < totalEvent) && <img src={image}></img> }
@@ -132,12 +171,23 @@ function Event(props) {
                         width={50}
                     />}{des}
                     <hr></hr>
-                    {isOld(eventData[1]) ? "" :
+                    {props.location.search === "?ref=_ref" || isOld(eventData[1]) ? 
+                    ""
+                    :
                     <button onClick={buyTicket}>
                         Buy Ticket
                     </button>}
                 </>
                 }
+                {props.location.search === "?ref=_ref" && <h2>Refund Requests</h2> }
+                {props.location.search === "?ref=_ref" && allData.map((ele, index)=>{
+                        return (
+                        ele[3] && ele[2] && <li key={index}>
+                            Ticket Id - {ele['__id']}
+                            <br></br>
+                            <button data-id={ele['__id']} onClick={refundApprove}>Refund</button>
+                        </li>)
+                    })}
             </div>
         </div>
         )

@@ -18,7 +18,7 @@ function SideBar(props) {
                 <li><NavLink activeClassName='activePath' onClick={handleClickOnLink} to="/my-tickets">My Tickets</NavLink></li>
                 {!props.isOwner && <li><NavLink activeClassName='activePath' onClick={handleClickOnLink} to="/getApproval">Get Approval</NavLink></li>}
                 {props.isOwner && <li><NavLink activeClassName='activePath' onClick={handleClickOnLink} to="/ViewRequests">View Requests</NavLink></li>}
-                <li><NavLink activeClassName='activePath' onClick={handleClickOnLink} to="/verify">Verify</NavLink></li>
+                {props.isOwner && <li><NavLink activeClassName='activePath' onClick={handleClickOnLink} to="/verify">Verify</NavLink></li>}
             </ul>
         </div>
     )

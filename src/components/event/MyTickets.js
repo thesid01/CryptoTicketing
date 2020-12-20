@@ -74,6 +74,25 @@ function MyTickets(props) {
         return sec >= d.getTime()
     }
 
+    const requestRefund = async (event) => {
+        var index = event.target.getAttribute('data-id')
+        var res;
+        try {
+            await eventContract.methods.requestRefund(index).send({from: account})
+            addToast('Refund Requested', {
+                appearance: 'success',
+                autoDismiss: true,
+            })
+
+        } catch (error) {
+            console.log(error)
+            addToast('Error Occurred. Try Again', {
+                appearance: 'success',
+                autoDismiss: true,
+            })
+        }
+    }
+
     const generateHash = (event) => {
         var index = event.target.getAttribute('data-id')
         console.log(event.target.getAttribute('data-id'))
@@ -122,8 +141,11 @@ function MyTickets(props) {
                                 {<>Ticket Id - {index}</>}
                             </div>
                             {isOld(ele["time"]) ? "" : 
-                            <div className="form">
+                            <div className="form2">
                                     <button data-id={index} onClick={generateHash}>Generate QR</button>
+                                {ele[2] && !ele[3] && <button data-id={index} onClick={requestRefund}>Request Refund</button> }
+                                <br></br>{!ele[2] && 'Not a valid ticket... Refunded'}
+                                {ele[2] && ele[3] && 'Refund Pending'}
                             </div>}
                         </li>)
                     })}

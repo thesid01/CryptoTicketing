@@ -106,6 +106,8 @@ function Approve(props) {
                     <table style={{display: "table"}}>
                         <tbody>
                                 <tr><td className="right bold">Aadhar Number :</td><td className="left">{eventData && eventData["0"]}</td></tr>
+                                <tr><td className="right bold">Name :</td><td className="left">{eventData && eventData["3"]}</td></tr>
+                                <tr><td className="right bold">Age :</td><td className="left">{eventData && eventData["4"]}</td></tr>
                         </tbody>
                     </table>
                     <hr></hr>

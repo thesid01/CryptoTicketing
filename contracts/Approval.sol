@@ -15,6 +15,8 @@ contract Approval is Ownable {
     
     struct Request {
         string aadharNo;
+        string name;
+        uint age;
         string photoProof;
         bool approved;
         address requestAddress;
@@ -46,7 +48,7 @@ contract Approval is Ownable {
         _;
     }
     
-    function requestApproval(string memory ssn, string memory hash) 
+    function requestApproval(string memory ssn, string memory hash, string memory _name, uint _age) 
     validAadhar(ssn)
     hasRequested(msg.sender)
     public
@@ -54,6 +56,8 @@ contract Approval is Ownable {
         Request memory _request = Request({
 			aadharNo: ssn,
 			photoProof: hash,
+            name: _name,
+            age: _age,
 			approved: false,
             requestAddress: msg.sender
 		});
@@ -79,8 +83,8 @@ contract Approval is Ownable {
     function getRequest(uint id)
     public
     view
-    returns(string memory, string memory, bool){
-        return (requests[id].aadharNo, requests[id].photoProof, requests[id].approved);
+    returns(string memory, string memory, bool, string memory, uint){
+        return (requests[id].aadharNo, requests[id].photoProof, requests[id].approved, requests[id].name, requests[id].age);
     }
     
     function getTotalRequestsCount()

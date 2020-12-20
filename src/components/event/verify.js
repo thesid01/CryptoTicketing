@@ -68,7 +68,7 @@ function Verify(props) {
             var str = "" + tid + eid + sid + address
             var _shacode = sha256(str)
             console.log(qr, _shacode)
-            if(qr == _shacode){
+            if(qr == _shacode && ticket[2]){
                 addToast('Valid Ticket.', {
                     appearance: 'success',
                     autoDismiss: true,

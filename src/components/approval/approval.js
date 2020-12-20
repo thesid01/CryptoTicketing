@@ -10,6 +10,8 @@ function Approval(props) {
     accounts = props.bc.accounts[0];
 
     const [aadhar, setaadhar] = useState('')
+    const [name, setname] = useState('')
+    const [age, setage] = useState('')
     const [file, setfile] = useState(null)
     const [buffer, setbuffer] = useState('')
     const [isLoading, setisLoading] = useState(false)
@@ -36,6 +38,8 @@ function Approval(props) {
 
     const initializeState = () => {
         setaadhar('');
+        setname('')
+        setage('')
         setfile(null);
         setbuffer('')
         setisLoading(false);
@@ -59,7 +63,7 @@ function Approval(props) {
         var result = await ipfs.add(data)
 
         await eventContract.methods
-            .requestApproval( aadhar ,result["path"])
+            .requestApproval( aadhar ,result["path"], name, age)
             .send({from: accounts})
         initializeState()
         setisLoading(false)
@@ -80,6 +84,24 @@ function Approval(props) {
                     placeholder="Enter aadhar Number"
                     value={aadhar}
                     onChange={(e)=> setaadhar(e.target.value)}
+                    maxLength='50'
+                />
+
+                <input
+                    type="text"
+                    className="form-field animation a3"
+                    placeholder="Enter Name"
+                    value={name}
+                    onChange={(e)=> setname(e.target.value)}
+                    maxLength='50'
+                />
+
+                <input
+                    type="number"
+                    className="form-field animation a3"
+                    placeholder="Enter age"
+                    value={age}
+                    onChange={(e)=> setage(e.target.value)}
                     maxLength='50'
                 />
 

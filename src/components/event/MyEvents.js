@@ -15,6 +15,7 @@ function MyEvents(props) {
 
         async function getData(id){
             var result = await eventContract.methods.getEvent(parseInt(id)).call()
+            result['__id'] = id
             setallData(prevData => [...prevData, result])
             return result
         }
@@ -64,8 +65,8 @@ function MyEvents(props) {
                             </div>
                             {isOld(ele["time"]) ? "" : 
                             <div className="form">
-                                <NavLink to={`/event/${index}`}>
-                                    <button>Buy Ticket</button>
+                                <NavLink to={`/event/${ele['__id']}?ref=_ref`}>
+                                    <button>View Refund Request</button>
                                 </NavLink>
                             </div>}
                         </li>)

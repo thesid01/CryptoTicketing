@@ -30,6 +30,7 @@ contract Events is EventTicket, Pausable, Ownable, Approval {
 	Event[] private allEvents;
     
     mapping(address => uint256[]) private ownedEvents;
+	mapping(uint => uint256[]) private eventTicketsMap;
 
 	event CreatedEvent(address indexed owner, uint eventId);
 	event SoldTicket(address indexed buyer, uint indexed eventId, uint ticketId);
@@ -88,6 +89,10 @@ contract Events is EventTicket, Pausable, Ownable, Approval {
 
 	function eventsOf(address _owner) public view returns(uint[] memory) {
 		return ownedEvents[_owner];
+	}
+
+	function ticketsOfEvent(uint _eventId) public view returns(uint[] memory) {
+		return eventTicketsMap[_eventId];
 	}
 
 	function getEvent(uint _id)
@@ -149,11 +154,15 @@ contract Events is EventTicket, Pausable, Ownable, Approval {
 
 		Ticket memory _ticket = Ticket({
 			eventId: _eventId,
-			seatId: seat
+			seatId: seat,
+			owner: msg.sender,
+			isValid: true,
+			refundRequested: false
 		});
         tickets.push(_ticket);
 		uint _ticketId = tickets.length.sub(1);
 		setTicket(_ticketId, msg.sender);
+		eventTicketsMap[_eventId].push(_ticketId);
         _mint(msg.sender, _ticketId);
 		emit SoldTicket(msg.sender, _eventId, _ticketId);
 	}
