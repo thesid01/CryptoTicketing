@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react'
 import { useHistory } from 'react-router-dom'
 import "react-loader-spinner/dist/loader/css/react-spinner-loader.css"
 import Loader from 'react-loader-spinner'
-import IpfsHttpClient from 'ipfs-http-client';
 import { useToasts } from 'react-toast-notifications'
 
 function Event(props) {
@@ -12,7 +11,6 @@ function Event(props) {
     const history = useHistory()
     const { addToast } = useToasts()
 
-    const ipfs = IpfsHttpClient({ host: 'localhost', port: '5001', protocol: 'http' })
     const [totalEvent, settotalEvent] = useState(0)
     const [eventId, seteventId] = useState('')
     const [eventData, seteventData] = useState("")

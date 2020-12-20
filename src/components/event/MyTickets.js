@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from 'react'
+import {CopyToClipboard} from 'react-copy-to-clipboard';
+import { useToasts } from 'react-toast-notifications'
 import logo from '../../ticketlogo.jpg'
 import qrlogo from '../../ticketlogo.png'
+import copylogo from '../../copy.png'
 import sha256 from 'sha256'
 import QRCode from "react-qr-code";
 import domtoimage from 'dom-to-image';
@@ -11,10 +14,13 @@ function MyTickets(props) {
     var subtitle;
     var eventContract = props.bc.contracts.event;
     var account = props.bc.accounts[0]
+
+    const { addToast } = useToasts()
     const [allData, setallData] = useState([])
     const [QR, setQR] = useState('')
     const [eid, seteid] = useState('')
     const [sid, setsid] = useState('')
+    const [shaCode, setshaCode] = useState('')
     const [modalIsOpen,setIsOpen] = React.useState(false);
 
     const customStyles = {
@@ -59,13 +65,6 @@ function MyTickets(props) {
         })
     },[])
 
-    const getLocaleTime = (time) => {
-        var utcSeconds = parseInt(time);
-        var d = new Date(0); // The 0 there is the key, which sets the date to the epoch
-        d.setUTCSeconds(utcSeconds);
-        return d.toLocaleString()
-    }
-
     const isOld = (time) => {
         var utcSeconds = parseInt(time);
         var d = new Date(0); // The 0 there is the key, which sets the date to the epoch
@@ -80,8 +79,9 @@ function MyTickets(props) {
         console.log(event.target.getAttribute('data-id'))
         console.log(allData[index])
         var str = "" + index + allData[index][0] + allData[index][1] + account
-        console.log(str)
-        setQR(sha256(str))
+        var _shacode = sha256(str)
+        setQR(_shacode);
+        setshaCode(_shacode);
         seteid(allData[index][0])
         setsid(allData[index][1])
         openModal();
@@ -95,6 +95,13 @@ function MyTickets(props) {
             link.href = dataUrl;
             link.click();
         });
+    }
+
+    const clickToCopy = () => {
+        addToast('Sha Code Copied.', {
+            appearance: 'success',
+            autoDismiss: true,
+        })
     }
 
     return (
@@ -111,6 +118,8 @@ function MyTickets(props) {
                                 {ele[0] && <>Event Id - {ele["0"]}</>}
                                 <br></br>
                                 {ele[1] && <>Seat Id - {ele["1"]}</>}
+                                <br></br>
+                                {<>Ticket Id - {index}</>}
                             </div>
                             {isOld(ele["time"]) ? "" : 
                             <div className="form">
@@ -122,6 +131,7 @@ function MyTickets(props) {
                         isOpen={modalIsOpen}
                         onAfterOpen={afterOpenModal}
                         onRequestClose={closeModal}
+                        ariaHideApp={false}
                         style={customStyles}
                         contentLabel="Example Modal">
                 
@@ -129,7 +139,19 @@ function MyTickets(props) {
                         <button onClick={DownloadQR}>Download</button>
                         <button onClick={closeModal}>close</button>
                         {QR && <div id="QR"><img src={qrlogo}></img ><QRCode value={QR} />
-                        <br></br><br></br>
+                        <br></br>
+                        <div style={{'display': 'flex','flexDirection': 'row'}}>
+                            <div id="shaCode" style={{'width': '250px','overflowWrap': 'break-word'}}>
+                                {shaCode}
+                                
+                            </div>
+                            <div style={{'display': 'block','margin': 'auto','cursor':'pointer'}}>
+                                <CopyToClipboard text={shaCode} onCopy={clickToCopy}>
+                                    <img src={copylogo} style={{'width': '20px','height': 'auto'}} ></img >
+                                </CopyToClipboard>
+                            </div>
+                        </div>
+                        <br></br>
                         <div> Event ID-{eid} Seat ID-{sid}</div></div>}
                     </Modal>
                 </ul>

@@ -22,6 +22,7 @@ contract Approval is Ownable {
     
     mapping(string => bool) aadhar;
     mapping(address => string) addToAadhar;
+    mapping(string => address) addToAddress;
     
     mapping(uint => Request) requests;
     uint TotalRequests;
@@ -71,6 +72,7 @@ contract Approval is Ownable {
         _r.approved = true;
         aadhar[_r.aadharNo] = true;
         addToAadhar[_r.requestAddress] = _r.aadharNo;
+        addToAddress[_r.aadharNo] = _r.requestAddress;
         approved[_r.requestAddress] = true;
     }
     
@@ -86,6 +88,13 @@ contract Approval is Ownable {
     view
     returns(uint){
         return TotalRequests;
+    }
+
+    function getAddress(string memory _aadhar)
+    public
+    view
+    returns(address){
+        return addToAddress[_aadhar];
     }
     
     function isApproved(address add)

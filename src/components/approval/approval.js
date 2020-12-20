@@ -13,7 +13,6 @@ function Approval(props) {
     const [file, setfile] = useState(null)
     const [buffer, setbuffer] = useState('')
     const [isLoading, setisLoading] = useState(false)
-    const [ipfsHash, setipfsHash] = useState('')
 
     const ipfs = IpfsHttpClient({ host: 'localhost', port: '5001', protocol: 'http' })
     const { addToast } = useToasts()
@@ -40,7 +39,6 @@ function Approval(props) {
         setfile(null);
         setbuffer('')
         setisLoading(false);
-        setipfsHash('');
     }
 
     const handleSubmit = async () => {
@@ -59,7 +57,6 @@ function Approval(props) {
 		});
 
         var result = await ipfs.add(data)
-        setipfsHash(result)
 
         await eventContract.methods
             .requestApproval( aadhar ,result["path"])

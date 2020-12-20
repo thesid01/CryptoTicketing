@@ -5,7 +5,7 @@ import logo from '../../OIP.png'
 function ViewRequests(props) {
 
     var eventContract = props.bc.contracts.event;
-    var account = props.bc.accounts[0]
+    
     const [allData, setallData] = useState([])
 
     useEffect(() => {

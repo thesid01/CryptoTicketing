@@ -28,7 +28,6 @@ function CreateEvent(props) {
     const [file, setfile] = useState(null)
     const [buffer, setbuffer] = useState('')
     const [isLoading, setisLoading] = useState(false)
-    const [ipfsHash, setipfsHash] = useState('')
     const { addToast } = useToasts()
     
     const handleNameChange = (e) =>{
@@ -99,7 +98,6 @@ function CreateEvent(props) {
 		});
 
         var result = await ipfs.add(data)
-        setipfsHash(result)
 
         var epoch_datetime = parseInt((new Date(datetime)).getTime()/1000.0)
         // console.log(name,epoch_datetime,parseInt(price),false,isLimited,parseInt(seats),'i do not know');

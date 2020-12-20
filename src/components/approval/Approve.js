@@ -2,15 +2,12 @@ import React, { useEffect, useState } from 'react'
 import { useHistory } from 'react-router-dom'
 import Loader from 'react-loader-spinner'
 import { useToasts } from 'react-toast-notifications'
-import IpfsHttpClient from 'ipfs-http-client';
 
 function Approve(props) {
 
     var eventContract = props.bc.contracts.event,
         accounts = props.bc.accounts[0];
 
-    const ipfs = IpfsHttpClient({ host: 'localhost', port: '5001', protocol: 'http' })
-    
     const history = useHistory()
     const { addToast } = useToasts()
 
