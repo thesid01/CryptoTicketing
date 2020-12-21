@@ -182,10 +182,12 @@ function Event(props) {
                 {props.location.search === "?ref=_ref" && <h2>Refund Requests</h2> }
                 {props.location.search === "?ref=_ref" && allData.map((ele, index)=>{
                         return (
-                        ele[3] && ele[2] && <li key={index}>
-                            Ticket Id - {ele['__id']}
-                            <br></br>
-                            <button data-id={ele['__id']} onClick={refundApprove}>Refund</button>
+                        ele[3] && ele[2] && <li className="li" key={index}
+                            style={{'height': 'auto','padding': '15px','flexDirection': 'row','display': 'flex','flexFlow': 'column'}} >
+                            <div className="form">
+                                Ticket Id - {ele['__id']}
+                                <button data-id={ele['__id']} onClick={refundApprove}>Refund</button>
+                            </div>
                         </li>)
                     })}
             </div>

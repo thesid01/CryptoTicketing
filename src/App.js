@@ -116,7 +116,7 @@ class App extends Component {
           <div className="App">
             <Header open={this.state.menuOpen} toggleMenu={this.toggleMenu}></Header>
             {!this.state.isApproved && !this.state.isOwner&& <div className="notApproved">Not Approved. Click <NavLink to="/getApproval">here </NavLink>to apply for approval.</div>}
-            <SideBar open={this.state.menuOpen} toggleMenu={this.toggleMenu} isOwner={this.state.isOwner}></SideBar>
+            <SideBar open={this.state.menuOpen} toggleMenu={this.toggleMenu} isOwner={this.state.isOwner} isApproved={this.state.isApproved} ></SideBar>
             <MainContent bc={{accounts:this.state.accounts, contracts: this.state.contract}}></MainContent>
           </div>
         </ToastProvider>

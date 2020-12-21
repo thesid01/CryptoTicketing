@@ -130,7 +130,7 @@ function MyTickets(props) {
                 <ul className="ul">
                     {allData.map((ele, index)=>{
                         return (
-                        <li key={index} className={isOld(ele["time"]) ? "li old" : "li"}>
+                        <li key={index} className={isOld(ele["time"]) || !ele[2] ? "li old" : "li"}>
                             <img alt="event img" src={logo} className="img">
                             </img>
                             <div style={{margin:'5px 0 0 0'}}>
