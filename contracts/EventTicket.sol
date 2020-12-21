@@ -8,7 +8,7 @@ contract EventTicket is ERC721("EventTicket", "🎟️") {
     struct Ticket {
         uint eventId;
         uint seatId;
-        address owner;
+        address payable owner;
         bool isValid;
         bool refundRequested;
     }
@@ -23,11 +23,6 @@ contract EventTicket is ERC721("EventTicket", "🎟️") {
         require(_owner == tickets[_tid].owner);
         require(tickets[_tid].isValid);
         require(!tickets[_tid].refundRequested);
-        _;
-    }
-
-    modifier validRequestRefundId(uint _rrid) {
-        require(_rrid < refundRequest.length);
         _;
     }
 
@@ -51,12 +46,5 @@ contract EventTicket is ERC721("EventTicket", "🎟️") {
     {
         refundRequest.push(ticketId);
         tickets[ticketId].refundRequested = true;
-    }
-
-    function approveRefund(uint refundRequestId) 
-    validRequestRefundId(refundRequestId)
-    public
-    {
-        tickets[refundRequestId].isValid = false;
     }
 }

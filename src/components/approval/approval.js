@@ -27,7 +27,7 @@ function Approval(props) {
     }
 
     const handleFileChange = (event) => {
-        // setfile(e.target.files[0])
+        setfile(event.target.files[0])
         event.stopPropagation()
         event.preventDefault()
         const file = event.target.files[0]

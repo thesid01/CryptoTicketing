@@ -104,7 +104,7 @@ function Event(props) {
             return result
         }
         buyTicket().then(()=>{
-            addToast('Request Created Successfully.', {
+            addToast('Ticket Bought.', {
                 appearance: 'success',
                 autoDismiss: true,
             })

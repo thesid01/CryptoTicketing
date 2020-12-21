@@ -39,6 +39,12 @@ contract Events is EventTicket, Pausable, Ownable, Approval {
 		tokenAddress = _token;
 	}
 
+
+    modifier validRequestRefundId(uint _rrid) {
+        require(_rrid < refundRequest.length);
+        _;
+    }
+
     modifier goodTime(uint _time) {
         require(_time > now);
         _;
@@ -166,4 +172,13 @@ contract Events is EventTicket, Pausable, Ownable, Approval {
         _mint(msg.sender, _ticketId);
 		emit SoldTicket(msg.sender, _eventId, _ticketId);
 	}
+
+	function approveRefund(uint refundRequestId) 
+    // validRequestRefundId(refundRequestId)
+    public
+    {
+		allEvents[tickets[refundRequestId].eventId].sold = allEvents[tickets[refundRequestId].eventId].sold - 1;
+		// tickets[refundRequestId].owner.transfer(_event.price);
+        tickets[refundRequestId].isValid = false;
+    }
 }

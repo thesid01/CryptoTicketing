@@ -70,7 +70,7 @@ function Approve(props) {
 
         sendApprove()
         .then(()=>{
-            addToast('Request Created Successfully.', {
+            addToast('Request Approved Successfully.', {
                 appearance: 'success',
                 autoDismiss: true,
             })
